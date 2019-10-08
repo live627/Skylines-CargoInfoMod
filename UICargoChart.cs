@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CargoInfoMod
 {
-    class UICargoChart: UIRadialChart
+    class UICargoChart : UIRadialChart
     {
         public UICargoChart()
         {

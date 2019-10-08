@@ -42,7 +42,7 @@ namespace CargoInfoMod
             var lang = LocaleManager.instance.language ?? "en";
             if (!localeStore.ContainsKey(lang))
             {
-                localeStore.Add(lang, LocaleFromFile(LocalePath(File.Exists(LocalePath(lang))? lang: "en")));
+                localeStore.Add(lang, LocaleFromFile(LocalePath(File.Exists(LocalePath(lang)) ? lang : "en")));
             }
             return localeStore[lang].Get(new Locale.Key { m_Identifier = id });
         }

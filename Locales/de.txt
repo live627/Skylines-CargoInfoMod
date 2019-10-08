@@ -12,4 +12,4 @@ EXPORT	Export
 STATS_WINDOW_LABEL	Waren Statistik
 RESET_COUNTERS_TOOLTIP	Setze alle Zähler für dieses Gebäude zurück - Mit Vorsicht nutzen!
 SWITCH_MODES_TOOLTIP_PREV	Wechsel zwischen Anzeige-Modi (zeigt nun die Werte letzten Monats)
-SWITCH_MODES_TOOLTIP_CUR Wechsel zwischen Anzeige-Modi (zeigt nun die Werte dieses Monats)
+SWITCH_MODES_TOOLTIP_CUR	Wechsel zwischen Anzeige-Modi (zeigt nun die Werte dieses Monats)

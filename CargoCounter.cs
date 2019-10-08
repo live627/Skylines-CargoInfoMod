@@ -10,13 +10,14 @@ using CargoInfoMod.Data;
 
 namespace CargoInfoMod
 {
-    public class CargoCounter: ThreadingExtensionBase
+    public class CargoCounter : ThreadingExtensionBase
     {
         private ModInfo mod;
 
         private UICargoChart vehicleCargoChart;
         private CargoUIPanel cargoPanel;
         private UILabel statsLabel;
+        private UIPanel rightPanel;
 
         public override void OnCreated(IThreading threading)
         {
@@ -26,7 +27,9 @@ namespace CargoInfoMod
             if (LoadingManager.instance.m_loadingComplete)
             {
                 // Mod reloaded while running the game, should set up again
+#if DEBUG
                 Debug.Log("ThreadingExtension created while running");
+#endif
                 OnLevelLoaded(SimulationManager.UpdateMode.LoadGame);
             }
             LoadingManager.instance.m_levelLoaded += OnLevelLoaded;
@@ -60,9 +63,13 @@ namespace CargoInfoMod
 
         private void OnLevelUnloaded()
         {
+#if DEBUG
             Debug.Log("Cleaning up UI...");
-            if (statsLabel != null)
-                statsLabel.eventClicked -= showDelegate;
+#endif
+            //if (statsLabel != null)
+            //    statsLabel.eventClicked -= showDelegate;
+            if (rightPanel != null)
+                rightPanel.eventClicked -= showDelegate;
             if (cargoPanel != null)
                 GameObject.Destroy(cargoPanel);
             if (vehicleCargoChart != null)
@@ -71,23 +78,30 @@ namespace CargoInfoMod
 
         private void SetupUIBindings()
         {
+#if DEBUG
             Debug.Log("Setting up UI...");
-
+#endif
             cargoPanel = (CargoUIPanel)UIView.GetAView().AddUIComponent(typeof(CargoUIPanel));
 
             var servicePanel = UIHelper.GetPanel("(Library) CityServiceWorldInfoPanel");
-            var statsPanel = servicePanel?.Find<UIPanel>("DescPanel");
-            statsLabel = statsPanel?.Find<UILabel>("Desc");
+            //var statsPanel = servicePanel?.Find<UIPanel>("DescPanel");
+            //statsLabel = statsPanel?.Find<UILabel>("Desc");
+            statsLabel = servicePanel?.Find<UILabel>("Desc");
+            rightPanel = servicePanel?.Find<UIPanel>("Right");
             if (servicePanel == null)
                 Debug.LogError("CityServiceWorldInfoPanel not found");
-            if (statsPanel == null)
-                Debug.LogError("DescPanel not found");
-            if (statsLabel == null)
-                Debug.LogError("DescPanel.Desc label not found");
+            //if (statsPanel == null)
+            //    Debug.LogError("DescPanel not found");
+            //if (statsLabel == null)
+            if (rightPanel == null)
+                //Debug.LogError("DescPanel.Desc label not found");
+                Debug.LogError("ServicePanel.Right panel not found");
             else
             {
-                Debug.Log("Service stats label found!");
-
+                //Debug.Log("Service stats label found!");
+#if DEBUG
+                Debug.Log("ServicePanel.Right panel found!");
+#endif
                 showDelegate = (sender, e) =>
                 {
                     if (mod.data.TryGetEntry(WorldInfoPanel.GetCurrentInstanceID().Building, out _))
@@ -96,7 +110,8 @@ namespace CargoInfoMod
                     }
                 };
 
-                statsLabel.eventClicked += showDelegate;
+                //statsLabel.eventClicked += showDelegate;
+                rightPanel.eventClicked += showDelegate;
             }
 
             var vehicleMainPanel = UIHelper.GetPanel("(Library) CityServiceVehicleWorldInfoPanel");
@@ -119,11 +134,15 @@ namespace CargoInfoMod
 
         public override void OnUpdate(float realTimeDelta, float simulationTimeDelta)
         {
-            if (lastReset < SimulationManager.instance.m_currentGameTime.Date && SimulationManager.instance.m_currentGameTime.Day == 1)
+            DateTime tempDateTime = SimulationManager.instance.m_currentGameTime;
+            if ((mod.Options.UpdateHourly && lastReset.Hour < tempDateTime.Hour) ||
+                (!mod.Options.UpdateHourly && lastReset < tempDateTime && tempDateTime.Day == 1))
             {
-                lastReset = SimulationManager.instance.m_currentGameTime.Date;
+                lastReset = tempDateTime;
                 mod.data.UpdateCounters();
+#if DEBUG
                 Debug.Log("Monthly counter values updated");
+#endif
             }
 
             if (!WorldInfoPanel.AnyWorldInfoPanelOpen())
@@ -199,7 +218,7 @@ namespace CargoInfoMod
                 if (instanceID.Building != 0 && mod.data.TryGetEntry(instanceID.Building, out stats))
                 {
                     var sb = new StringBuilder();
-                    var timeScale = mod.Options.UseMonthlyValues? 1.0f: 0.25f;
+                    var timeScale = mod.Options.UseMonthlyValues ? 1.0f : 0.25f;
 
                     var receivedAmount = Mathf.Ceil(Mathf.Max(stats.CarsReceived, stats.CarsReceivedLastTime) /
                                                     CargoData.TruckCapacity * timeScale);
@@ -209,7 +228,7 @@ namespace CargoInfoMod
 
                     sb.AppendFormat(
                         "{0}: {1:0}",
-                        Localization.Get(mod.Options.UseMonthlyValues ? "TRUCKS_RCVD_LAST_MONTH": "TRUCKS_RCVD_LAST_WEEK"),
+                        Localization.Get(mod.Options.UseMonthlyValues ? "TRUCKS_RCVD_LAST_MONTH" : "TRUCKS_RCVD_LAST_WEEK"),
                         receivedAmount);
                     sb.AppendLine();
                     sb.AppendFormat(

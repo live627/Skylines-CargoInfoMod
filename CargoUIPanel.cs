@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace CargoInfoMod
 {
-    class CargoUIPanel: UIPanel
+    class CargoUIPanel : UIPanel
     {
         private const int Width = 384;
         private const int HandleHeight = 40;
@@ -170,7 +170,7 @@ namespace CargoInfoMod
 
             for (int n = 0; n < cargoCategories.Count; n++)
             {
-                var chart = (n > 2 ? sentPanel: rcvdPanel).AddUIComponent<UICargoChart>();
+                var chart = (n > 2 ? sentPanel : rcvdPanel).AddUIComponent<UICargoChart>();
                 chart.size = ChartSize;
                 charts.Add(chart);
 
@@ -259,4 +259,3 @@ namespace CargoInfoMod
         }
     }
 }
-

@@ -3,7 +3,7 @@ TRUCKS_RCVD_LAST_MONTH	Грузовиков получено за прошлый
 TRUCKS_RCVD_LAST_WEEK	Грузовиков получено на прошлой неделе
 TRUCKS_SENT_LAST_MONTH	Грузовиков отправлено за прошлый месяц
 TRUCKS_SENT_LAST_WEEK	Грузовиков отправлено на прошлой неделе
-KILO_UNITS	 тыс. ед.	Used in: "100k units"
+KILO_UNITS	тыс. ед. Used in: "100k units"
 RECEIVED	Получено
 SENT	Отдано
 LOCAL	Внутри
