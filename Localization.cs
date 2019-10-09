@@ -32,10 +32,7 @@ namespace CargoInfoMod
         }
 
         private static string LocalePath(string lang)
-        {
-            var modPath = PluginManager.instance.FindPluginInfo(Assembly.GetExecutingAssembly()).modPath;
-            return Path.Combine(modPath, $"Locales/{lang}.txt");
-        }
+            => Path.Combine(PluginManager.instance.FindPluginInfo(Assembly.GetExecutingAssembly()).modPath, $"Locales/{lang}.txt");
 
         public static string Get(string id)
         {

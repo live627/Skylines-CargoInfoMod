@@ -8,9 +8,6 @@ namespace CargoInfoMod
     {
         public static IEnumerable<UIPanel> GetUIPanelInstances() => UIView.library.m_DynamicPanels.Select(p => p.instance).OfType<UIPanel>();
         public static string[] GetUIPanelNames() => GetUIPanelInstances().Select(p => p.name).ToArray();
-        public static UIPanel GetPanel(string name)
-        {
-            return GetUIPanelInstances().FirstOrDefault(p => p.name == name);
-        }
+        public static UIPanel GetPanel(string name) => GetUIPanelInstances().FirstOrDefault(p => p.name == name);
     }
 }
